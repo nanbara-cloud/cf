@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>キャッシュフロー | SS事業部</title>
+<style>
+:root{--primary:#2563eb;--primary-lt:#eff6ff;--border:#e5e7eb;--bg:#f9fafb;--white:#fff;--text:#111827;--muted:#6b7280;--subtle:#9ca3af;--success:#16a34a;--warn:#d97706;--danger:#dc2626;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Meiryo','メイリオ','Hiragino Kaku Gothic Pro',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.6;}
+.hdr{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:200;}
+.hdr-ttl{font-size:14px;font-weight:700;display:flex;align-items:center;gap:9px;}
+.hdr-badge{background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;}
+.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--primary);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:5px;background:var(--white);}
+.back-btn:hover{background:var(--primary-lt);}
+.main{max-width:980px;margin:0 auto;padding:24px 28px;}
+.sec-ttl{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-ttl::before{content:'';display:block;width:3px;height:18px;background:var(--primary);border-radius:2px;}
+.sec-ttl.red::before{background:var(--danger);}
+.sec-ttl.purple::before{background:#7c3aed;}
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.sc{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:14px;}
+.sc-lbl{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.04em;margin-bottom:4px;}
+.sc-val{font-size:20px;font-weight:700;}
+.sc-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+/* 説明ボックス */
+.explain-box{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:18px 20px;margin-bottom:20px;}
+.explain-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.exp-card{border-radius:6px;padding:12px 14px;font-size:12px;line-height:1.8;}
+.exp-card.pl{background:#eff6ff;border-left:3px solid var(--primary);}
+.exp-card.cf{background:#f0fdf4;border-left:3px solid var(--success);}
+.exp-card strong{display:block;margin-bottom:4px;font-size:13px;}
+.example-box{background:#fafafa;border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:12px;}
+.ex-ttl{font-weight:700;margin-bottom:8px;color:var(--muted);font-size:11px;letter-spacing:.05em;}
+.ex-row{display:flex;gap:0;margin-bottom:4px;align-items:center;}
+.ex-month{width:60px;font-weight:700;font-size:12px;}
+.ex-bar{display:flex;gap:8px;flex:1;}
+.ex-chip{padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;}
+.ex-chip.pl{background:#dbeafe;color:var(--primary);}
+.ex-chip.cf{background:#dcfce7;color:var(--success);}
+.ex-chip.none{background:#f3f4f6;color:var(--muted);}
+.check-note{margin-top:10px;padding:8px 12px;background:#fffbeb;border-radius:5px;font-size:12px;color:#92400e;}
+/* 異常に見えるが問題ない説明 */
+.ok-anomaly{background:var(--white);border:1px solid var(--border);border-radius:7px;margin-bottom:20px;overflow:hidden;}
+.ok-anomaly-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;background:#f5f3ff;border-bottom:1px solid #e9d5ff;}
+.ok-anomaly-hdr:hover{background:#ede9fe;}
+.ok-anomaly-ttl{font-size:13px;font-weight:700;color:#7c3aed;display:flex;align-items:center;gap:8px;}
+.ok-anomaly-body{padding:16px;display:none;}
+.ok-anomaly-body.open{display:block;}
+.ok-item{padding:12px 14px;border-radius:6px;border-left:3px solid #a78bfa;background:#faf5ff;margin-bottom:10px;font-size:12px;line-height:1.8;}
+.ok-item:last-child{margin-bottom:0;}
+.ok-item .ok-month{font-weight:700;font-size:13px;color:#7c3aed;margin-bottom:4px;}
+.ok-item .ok-reason{color:var(--text);}
+/* テーブル */
+.card{background:var(--white);border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:24px;}
+.tab-row{display:flex;border-bottom:1px solid var(--border);}
+.tab-btn{padding:10px 24px;font-size:12px;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;}
+.tab-btn:hover{color:var(--text);} .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:700;}
+.tab-pane{display:none;}.tab-pane.active{display:block;}
+.tws{overflow-x:auto;}
+table.dt{width:100%;border-collapse:collapse;font-size:12px;}
+table.dt thead th{background:var(--bg);padding:9px 14px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.04em;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}
+table.dt thead th.r{text-align:right;}
+table.dt tbody td{padding:10px 14px;border-bottom:1px solid var(--border);white-space:nowrap;}
+table.dt tbody td.r{text-align:right;}
+table.dt tbody tr:last-child td{border-bottom:none;}
+table.dt tbody tr:hover td{background:#fafafa;}
+.tbl-note{font-size:10px;color:#7c3aed;font-weight:400;margin-left:6px;padding:1px 5px;background:#f5f3ff;border-radius:3px;}
+/* 未納セクション */
+.minou-month{border-bottom:1px solid var(--border);}
+.minou-month:last-child{border-bottom:none;}
+.minou-month-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;}
+.minou-month-hdr:hover{background:#fafafa;}
+.minou-badge{background:#fef2f2;color:var(--danger);font-size:11px;font-weight:700;padding:1px 7px;border-radius:10px;}
+.minou-arr{font-size:11px;color:var(--muted);transition:transform .2s;display:inline-block;}
+.minou-body{background:#fafafa;border-top:1px solid var(--border);}
+.st-badge{display:inline-block;padding:1px 7px;border-radius:3px;font-size:11px;font-weight:700;}
+.minou-kuburi{background:#fff7ed;color:var(--warn);}.minou-funou{background:#fef2f2;color:var(--danger);}
+.nodata{text-align:center;padding:28px;color:var(--subtle);}
+@media(max-width:700px){.main{padding:14px;}.hdr{padding:0 14px;}.sum-grid{grid-template-columns:1fr 1fr;}.explain-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-ttl"><span class="hdr-badge">CF</span>キャッシュフロー管理</div>
+  <a class="back-btn" href="ss_report_v4.html">← 営業ダッシュボードに戻る</a>
+</header>
+<div class="main">
+
+  <!-- 説明 -->
+  <div class="explain-box">
+    <div class="sec-ttl" style="margin-bottom:12px;">PLとCFの違い・読み方</div>
+    <div class="explain-grid">
+      <div class="exp-card pl"><strong>📊 PL（損益）＝ 利用月ベース</strong>サービスを使った月に売上計上される金額。<br>例：3月利用 → 3月のPLに加算</div>
+      <div class="exp-card cf"><strong>💰 CF（キャッシュフロー）＝ 支払期限ベース</strong>実際にお金が入ってくる月の金額。<br>例：3月利用・4月払い → 4月のCFに加算</div>
+    </div>
+    <div class="example-box">
+      <div class="ex-ttl">📌 具体例：3月利用・4月支払 ¥35,000 のクライアント</div>
+      <div class="ex-row"><span class="ex-month">3月</span><div class="ex-bar"><span class="ex-chip pl">PL +¥35,000</span><span class="ex-chip none">CF ±0（未入金）</span></div></div>
+      <div class="ex-row"><span class="ex-month">4月</span><div class="ex-bar"><span class="ex-chip none">PL ±0（売上なし）</span><span class="ex-chip cf">CF +¥35,000（入金）</span></div></div>
+      <div class="check-note">✅ 過去月の<strong>累積回収率が100%に近づいていれば正常</strong>です。差分＋は入金先行、差分－は回収待ちの売上があることを意味します。</div>
+    </div>
+  </div>
+
+  <!-- サマリー -->
+  <div class="sum-grid">
+    <div class="sc"><div class="sc-lbl">PL累計（2025/04〜）</div><div class="sc-val">¥142,548,116</div><div class="sc-sub">利用月ベース</div></div>
+    <div class="sc"><div class="sc-lbl">CF累計（2025/04〜）</div><div class="sc-val">¥144,046,283</div><div class="sc-sub">支払期限ベース</div></div>
+    <div class="sc"><div class="sc-lbl">累計差分（CF－PL）</div><div class="sc-val" style="color:var(--success);">+¥1,498,167</div><div class="sc-sub">＋入金先行 ／ －回収待ち残あり</div></div>
+    <div class="sc"><div class="sc-lbl">累計回収率（CF÷PL）</div><div class="sc-val" style="color:var(--success);">101.1%</div><div class="sc-sub">100%に近いほど回収済み</div></div>
+  </div>
+
+  <!-- 異常に見えるが問題ない説明 -->
+  <div class="ok-anomaly">
+    <div class="ok-anomaly-hdr" onclick="toggleOkBox()">
+      <div class="ok-anomaly-ttl">✅ 異常に見えるが問題ない月の説明</div>
+      <span id="okBoxArr" style="font-size:11px;color:#7c3aed;transition:transform .2s;display:inline-block;">▼</span>
+    </div>
+    <div class="ok-anomaly-body" id="okBoxBody">
+      <div class="ok-item">
+        <div class="ok-month">🟡 2026年2月：CF +31%（+¥253万）</div>
+        <div class="ok-reason">
+          <strong>原因：2025年12月〜2026年1月の支払期限が2月に集中したため。</strong><br>
+          一部クライアントの口座振替スケジュールや支払サイクルにより、前月利用分の入金が2月にまとめて到着。売上（PL）は各利用月に正しく計上されており、異常ではありません。累積回収率101.8%で正常範囲内です。
+        </div>
+      </div>
+      <div class="ok-item">
+        <div class="ok-month">🟡 2026年4月：CF +101%（+¥405万）← 最大の乖離</div>
+        <div class="ok-reason">
+          <strong>原因：支払期限が4月に設定されたレコードに、3月利用分と5月利用分が混在しているため。</strong><br>
+          内訳：2026年3月 利用分 297件 ¥3,877,463、2026年4月 利用分 2件 ¥68,500、2026年5月 利用分 142件 ¥4,108,822<br>
+          前払い（5月利用分を4月に先払い）のクライアントが142件含まれており、CFが膨らんで見えます。PLは正しく利用月に計上されているため問題ありません。
+        </div>
+      </div>
+      <div class="ok-item">
+        <div class="ok-month">🟡 2026年5月・6月：PLはあるがCFがほぼゼロ</div>
+        <div class="ok-reason">
+          <strong>原因：請求書の支払期限がまだ設定されていない、または入力中のレコードが大半のため。</strong><br>
+          2026年5月・6月はデータ入力が追いついていない集計途中の月です。請求管理データが更新されるにつれて、CFの数値も積み上がっていきます。現時点では参考値としてご覧ください。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 月別テーブル -->
+  <div class="sec-ttl" style="margin-bottom:12px;">月別 PL・CF・差分一覧</div>
+  <div class="card">
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="swTab('tab2025',this)">2025年（4〜12月）</button>
+      <button class="tab-btn" onclick="swTab('tab2026',this)">2026年（1月〜）</button>
+    </div>
+    <div class="tab-pane active" id="tab2025"><div class="tws">
+      <table class="dt"><thead><tr>
+        <th>月</th><th class="r">PL（利用月）</th><th class="r">CF（支払期限）</th>
+        <th class="r">月次差分</th><th class="r">累積差分</th><th class="r">累積回収率</th>
+      </tr></thead><tbody><tr>
+      <td><strong>2025年4月</strong></td>
+      <td class="r">¥12,128,023</td>
+      <td class="r">¥12,267,561</td>
+      <td class="r" style="font-weight:700;color:var(--success);">+¥139,538</td>
+      <td class="r" style="font-size:11px;color:var(--success);">+¥139,538</td>
+      <td class="r"><strong style="color:var(--success);">101.2%</strong></td>
+    </tr><tr>
+      <td><strong>2025年5月</strong></td>
+      <td class="r">¥12,688,253</td>
+      <td class="r">¥11,913,223</td>
+      <td class="r" style="font-weight:700;color:var(--danger);">-¥775,030</td>
+      <td class="r" style="font-size:11px;color:var(--danger);">-¥635,492</td>
+      <td class="r"><strong style="color:var(--warn);">97.4%</strong></td>
+    </tr><tr>
+      <td><strong>2025年6月</strong></td>
+      <td class="r">¥12,443,313</td>
+      <td class="r">¥12,741,003</td>
+      <td class="r" style="font-weight:700;color:var(--success);">+¥297,690</td>
+      <td class="r" style="font-size:11px;color:var(--danger);">-¥337,802</td>
+      <td class="r"><strong style="color:var(--success);">99.1%</strong></td>
+    </tr><tr>
+      <td><strong>2025年7月</strong></td>
+      <td class="r">¥12,134,089</td>
+      <td class="r">¥12,451,413</td>
+      <td class="r" style="font-weight:700;color:var(--success);">+¥317,324</td>
+      <td class="r" style="font-size:11px;color:var(--danger);">-¥20,478</td>
+      <td class="r"><strong style="color:var(--success);">100.0%</strong></td>
+    </tr><tr>
+      <td><strong>2025年8月</strong></td>
+      <td class="r">¥11,780,439</td>
+      <td class="r">¥12,191,989</td>
+      <td class="r" style="font-weight:700;color:var(--success);">+¥411,550</td>
+      <td class="r" style="font-size:11px;color:var(--success);">+¥391,072</td>
+      <td class="r"><strong style="color:var(--success);">100.6%</strong></td>
+    </tr><tr>
+      <td><strong>2025年9月</strong></td>
+      <td class="r">¥12,153,962</td>
+      <td class="r">¥12,471,239</td>
+      <td class="r" style="font-weight:700;color:var(--success);">+¥317,277</td>
+      <td class="r" style="font-size:11px;color:var(--success);">+¥708,349</td>
+      <td class="r"><strong style="color:var(--success);">101.0%</strong></td>
+    </tr><tr>
+      <td><strong>2025年10月</strong></td>
+      <td class="r">¥11,060,133</td>
+      <td class="r">¥11,836,810</td>
+      <td class="r" style="font-weight:700;color:var(--success);">+¥776,677</td>
+      <td class="r" style="font-size:11px;color:var(--success);">+¥1,485,026</td>
+      <td class="r"><strong style="color:var(--success);">101.8%</strong></td>
+    </tr><tr>
+      <td><strong>2025年11月</strong></td>
+      <td class="r">¥11,602,459</td>
+      <td class="r">¥10,095,785</td>
+      <td class="r" style="font-weight:700;color:var(--danger);">-¥1,506,674</td>
+      <td class="r" style="font-size:11px;color:var(--danger);">-¥21,648</td>
+      <td class="r"><strong style="color:var(--success);">100.0%</strong></td>
+    </tr><tr>
+      <td><strong>2025年12月</strong></td>
+      <td class="r">¥11,107,763</td>
+      <td class="r">¥9,026,281</td>
+      <td class="r" style="font-weight:700;color:var(--danger);">-¥2,081,482</td>
+      <td class="r" style="font-size:11px;color:var(--danger);">-¥2,103,130</td>
+      <td class="r"><strong style="color:var(--warn);">98.0%</strong></td>
+    </tr></tbody></table>
+    </div></div>
+    <div class="tab-pane" id="tab2026"><div class="tws">
+      <table class="dt"><thead><tr>
+        <th>月</th><th class="r">PL（利用月）</th><th class="r">CF（支払期限）</th>
+        <th class="r">月次差分</th><th class="r">累積差分</th><th class="r">累積回収率</th>
+      </tr></thead><tbody><tr>
+      <td><strong>2026年1月</strong></td>
+      <td class="r">¥10,581,446</td>
+      <td class="r">¥12,418,391</td>
+      <td class="r" style="font-weight:700;color:var(--success);">+¥1,836,945</td>
+      <td class="r" style="font-size:11px;color:var(--danger);">-¥266,185</td>
+      <td class="r"><strong style="color:var(--success);">99.8%</strong></td>
+    </tr><tr>
+      <td><strong>2026年2月</strong></td>
+      <td class="r">¥8,140,095</td>
+      <td class="r">¥10,673,108</td>
+      <td class="r" style="font-weight:700;color:var(--success);">+¥2,533,013</td>
+      <td class="r" style="font-size:11px;color:var(--success);">+¥2,266,828</td>
+      <td class="r"><strong style="color:var(--success);">101.8%</strong></td>
+    </tr><tr>
+      <td><strong>2026年3月</strong></td>
+      <td class="r">¥8,326,797</td>
+      <td class="r">¥7,827,695</td>
+      <td class="r" style="font-weight:700;color:var(--danger);">-¥499,102</td>
+      <td class="r" style="font-size:11px;color:var(--success);">+¥1,767,726</td>
+      <td class="r"><strong style="color:var(--success);">101.3%</strong></td>
+    </tr><tr>
+      <td><strong>2026年4月</strong><span class="tbl-note">※前払い分集中</span></td>
+      <td class="r">¥3,998,822</td>
+      <td class="r">¥8,054,785</td>
+      <td class="r" style="font-weight:700;color:var(--success);">+¥4,055,963</td>
+      <td class="r" style="font-size:11px;color:var(--success);">+¥5,823,689</td>
+      <td class="r"><strong style="color:var(--success);">104.2%</strong></td>
+    </tr><tr>
+      <td><strong>2026年5月</strong><span class="tbl-note">※集計途中</span></td>
+      <td class="r">¥4,251,822</td>
+      <td class="r">¥77,000</td>
+      <td class="r" style="font-weight:700;color:var(--danger);">-¥4,174,822</td>
+      <td class="r" style="font-size:11px;color:var(--success);">+¥1,648,867</td>
+      <td class="r"><strong style="color:var(--success);">101.2%</strong></td>
+    </tr><tr>
+      <td><strong>2026年6月</strong><span class="tbl-note">※集計途中</span></td>
+      <td class="r">¥150,700</td>
+      <td class="r">¥0</td>
+      <td class="r" style="font-weight:700;color:var(--danger);">-¥150,700</td>
+      <td class="r" style="font-size:11px;color:var(--success);">+¥1,498,167</td>
+      <td class="r"><strong style="color:var(--success);">101.1%</strong></td>
+    </tr></tbody></table>
+    </div></div>
+  </div>
+
+  <!-- 未回収（未納）一覧 -->
+  <div class="sec-ttl red" style="margin-bottom:12px;">未回収（未納）案件一覧
+    <span style="font-size:11px;font-weight:400;color:var(--muted);">2025年4月以降　合計26件 / ¥740,300</span>
+  </div>
+  <div class="card">
+    
+        <div class="minou-month">
+          <div class="minou-month-hdr" onclick="toggleMinou('mn-2025-04','mnarr-2025-04')">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <strong>2025年4月</strong>
+              <span class="minou-badge">1件</span>
+              <span style="color:var(--danger);font-weight:700;">¥5,500</span>
+            </div>
+            <span class="minou-arr" id="mnarr-2025-04">▼</span>
+          </div>
+          <div class="minou-body" id="mn-2025-04" style="display:none;">
+            <table class="dt" style="font-size:12px;">
+              <thead><tr>
+                <th>店舗名</th><th>利用月</th><th class="r">金額</th><th>ステータス</th><th>担当</th>
+              </tr></thead><tbody><tr>
+              <td><strong>松南食堂</strong></td>
+              <td style="color:var(--muted);">2025年3月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥5,500</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#db2777;display:inline-block;"></span>田中莉奈</span></td>
+            </tr></tbody></table></div></div>
+        <div class="minou-month">
+          <div class="minou-month-hdr" onclick="toggleMinou('mn-2025-05','mnarr-2025-05')">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <strong>2025年5月</strong>
+              <span class="minou-badge">1件</span>
+              <span style="color:var(--danger);font-weight:700;">¥5,500</span>
+            </div>
+            <span class="minou-arr" id="mnarr-2025-05">▼</span>
+          </div>
+          <div class="minou-body" id="mn-2025-05" style="display:none;">
+            <table class="dt" style="font-size:12px;">
+              <thead><tr>
+                <th>店舗名</th><th>利用月</th><th class="r">金額</th><th>ステータス</th><th>担当</th>
+              </tr></thead><tbody><tr>
+              <td><strong>松南食堂</strong></td>
+              <td style="color:var(--muted);">2025年4月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥5,500</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#db2777;display:inline-block;"></span>田中莉奈</span></td>
+            </tr></tbody></table></div></div>
+        <div class="minou-month">
+          <div class="minou-month-hdr" onclick="toggleMinou('mn-2025-06','mnarr-2025-06')">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <strong>2025年6月</strong>
+              <span class="minou-badge">1件</span>
+              <span style="color:var(--danger);font-weight:700;">¥5,500</span>
+            </div>
+            <span class="minou-arr" id="mnarr-2025-06">▼</span>
+          </div>
+          <div class="minou-body" id="mn-2025-06" style="display:none;">
+            <table class="dt" style="font-size:12px;">
+              <thead><tr>
+                <th>店舗名</th><th>利用月</th><th class="r">金額</th><th>ステータス</th><th>担当</th>
+              </tr></thead><tbody><tr>
+              <td><strong>松南食堂</strong></td>
+              <td style="color:var(--muted);">2025年5月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥5,500</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#db2777;display:inline-block;"></span>田中莉奈</span></td>
+            </tr></tbody></table></div></div>
+        <div class="minou-month">
+          <div class="minou-month-hdr" onclick="toggleMinou('mn-2025-08','mnarr-2025-08')">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <strong>2025年8月</strong>
+              <span class="minou-badge">2件</span>
+              <span style="color:var(--danger);font-weight:700;">¥66,000</span>
+            </div>
+            <span class="minou-arr" id="mnarr-2025-08">▼</span>
+          </div>
+          <div class="minou-body" id="mn-2025-08" style="display:none;">
+            <table class="dt" style="font-size:12px;">
+              <thead><tr>
+                <th>店舗名</th><th>利用月</th><th class="r">金額</th><th>ステータス</th><th>担当</th>
+              </tr></thead><tbody><tr>
+              <td><strong>（店舗名なし）</strong></td>
+              <td style="color:var(--muted);">2025年7月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥33,000</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#7c3aed;display:inline-block;"></span>不明</span></td>
+            </tr><tr>
+              <td><strong>（店舗名なし）</strong></td>
+              <td style="color:var(--muted);">2025年7月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥33,000</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#7c3aed;display:inline-block;"></span>不明</span></td>
+            </tr></tbody></table></div></div>
+        <div class="minou-month">
+          <div class="minou-month-hdr" onclick="toggleMinou('mn-2025-09','mnarr-2025-09')">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <strong>2025年9月</strong>
+              <span class="minou-badge">2件</span>
+              <span style="color:var(--danger);font-weight:700;">¥44,000</span>
+            </div>
+            <span class="minou-arr" id="mnarr-2025-09">▼</span>
+          </div>
+          <div class="minou-body" id="mn-2025-09" style="display:none;">
+            <table class="dt" style="font-size:12px;">
+              <thead><tr>
+                <th>店舗名</th><th>利用月</th><th class="r">金額</th><th>ステータス</th><th>担当</th>
+              </tr></thead><tbody><tr>
+              <td><strong>Sacca シェア アトリエ</strong></td>
+              <td style="color:var(--muted);">2025年10月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-kuburi">未納（口振失敗）</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>中岡世里菜</span></td>
+            </tr><tr>
+              <td><strong>松南食堂</strong></td>
+              <td style="color:var(--muted);">2025年8月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥5,500</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#db2777;display:inline-block;"></span>田中莉奈</span></td>
+            </tr></tbody></table></div></div>
+        <div class="minou-month">
+          <div class="minou-month-hdr" onclick="toggleMinou('mn-2025-12','mnarr-2025-12')">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <strong>2025年12月</strong>
+              <span class="minou-badge">1件</span>
+              <span style="color:var(--danger);font-weight:700;">¥38,500</span>
+            </div>
+            <span class="minou-arr" id="mnarr-2025-12">▼</span>
+          </div>
+          <div class="minou-body" id="mn-2025-12" style="display:none;">
+            <table class="dt" style="font-size:12px;">
+              <thead><tr>
+                <th>店舗名</th><th>利用月</th><th class="r">金額</th><th>ステータス</th><th>担当</th>
+              </tr></thead><tbody><tr>
+              <td><strong>Sacca シェア アトリエ</strong></td>
+              <td style="color:var(--muted);">2026年1月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-kuburi">未納（口振失敗）</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>中岡世里菜</span></td>
+            </tr></tbody></table></div></div>
+        <div class="minou-month">
+          <div class="minou-month-hdr" onclick="toggleMinou('mn-2026-01','mnarr-2026-01')">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <strong>2026年1月</strong>
+              <span class="minou-badge">3件</span>
+              <span style="color:var(--danger);font-weight:700;">¥106,700</span>
+            </div>
+            <span class="minou-arr" id="mnarr-2026-01">▼</span>
+          </div>
+          <div class="minou-body" id="mn-2026-01" style="display:none;">
+            <table class="dt" style="font-size:12px;">
+              <thead><tr>
+                <th>店舗名</th><th>利用月</th><th class="r">金額</th><th>ステータス</th><th>担当</th>
+              </tr></thead><tbody><tr>
+              <td><strong>Sacca シェア アトリエ</strong></td>
+              <td style="color:var(--muted);">2026年2月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-kuburi">未納（口振失敗）</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>中岡世里菜</span></td>
+            </tr><tr>
+              <td><strong>アンテナ屋さん.com</strong></td>
+              <td style="color:var(--muted);">2025年12月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#d97706;display:inline-block;"></span>高橋広輝</span></td>
+            </tr><tr>
+              <td><strong>shisha cafe kuma</strong></td>
+              <td style="color:var(--muted);">2026年2月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥29,700</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#db2777;display:inline-block;"></span>田中莉奈</span></td>
+            </tr></tbody></table></div></div>
+        <div class="minou-month">
+          <div class="minou-month-hdr" onclick="toggleMinou('mn-2026-02','mnarr-2026-02')">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <strong>2026年2月</strong>
+              <span class="minou-badge">5件</span>
+              <span style="color:var(--danger);font-weight:700;">¥169,950</span>
+            </div>
+            <span class="minou-arr" id="mnarr-2026-02">▼</span>
+          </div>
+          <div class="minou-body" id="mn-2026-02" style="display:none;">
+            <table class="dt" style="font-size:12px;">
+              <thead><tr>
+                <th>店舗名</th><th>利用月</th><th class="r">金額</th><th>ステータス</th><th>担当</th>
+              </tr></thead><tbody><tr>
+              <td><strong>Sacca シェア アトリエ</strong></td>
+              <td style="color:var(--muted);">2026年3月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-kuburi">未納（口振失敗）</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>中岡世里菜</span></td>
+            </tr><tr>
+              <td><strong>竹の塚モータースクール</strong></td>
+              <td style="color:var(--muted);">2026年3月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>中岡世里菜</span></td>
+            </tr><tr>
+              <td><strong>人類みな辛さが全て あべの店</strong></td>
+              <td style="color:var(--muted);">2026年1月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥33,000</td>
+              <td><span class="st-badge minou-kuburi">未納（口振失敗）</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>中岡世里菜</span></td>
+            </tr><tr>
+              <td><strong>たまき矯正歯科</strong></td>
+              <td style="color:var(--muted);">2026年1月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥30,250</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#d97706;display:inline-block;"></span>高橋広輝</span></td>
+            </tr><tr>
+              <td><strong>shisha cafe kuma</strong></td>
+              <td style="color:var(--muted);">2026年3月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥29,700</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#db2777;display:inline-block;"></span>田中莉奈</span></td>
+            </tr></tbody></table></div></div>
+        <div class="minou-month">
+          <div class="minou-month-hdr" onclick="toggleMinou('mn-2026-03','mnarr-2026-03')">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <strong>2026年3月</strong>
+              <span class="minou-badge">10件</span>
+              <span style="color:var(--danger);font-weight:700;">¥298,650</span>
+            </div>
+            <span class="minou-arr" id="mnarr-2026-03">▼</span>
+          </div>
+          <div class="minou-body" id="mn-2026-03" style="display:none;">
+            <table class="dt" style="font-size:12px;">
+              <thead><tr>
+                <th>店舗名</th><th>利用月</th><th class="r">金額</th><th>ステータス</th><th>担当</th>
+              </tr></thead><tbody><tr>
+              <td><strong>Sacca シェア アトリエ</strong></td>
+              <td style="color:var(--muted);">2026年4月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-kuburi">未納（口振失敗）</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>中岡世里菜</span></td>
+            </tr><tr>
+              <td><strong>International House of Waldorf Steiner (Magnolia,Magnolia tree)</strong></td>
+              <td style="color:var(--muted);">2026年4月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>中岡世里菜</span></td>
+            </tr><tr>
+              <td><strong>アンテナ屋さん.com</strong></td>
+              <td style="color:var(--muted);">2026年2月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#d97706;display:inline-block;"></span>高橋広輝</span></td>
+            </tr><tr>
+              <td><strong>ベーカリーショップGreen</strong></td>
+              <td style="color:var(--muted);">2026年2月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥38,500</td>
+              <td><span class="st-badge minou-kuburi">未納（口振失敗）</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#db2777;display:inline-block;"></span>田中莉奈</span></td>
+            </tr><tr>
+              <td><strong>人類みな辛さが全て あべの店</strong></td>
+              <td style="color:var(--muted);">2026年2月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥33,000</td>
+              <td><span class="st-badge minou-kuburi">未納（口振失敗）</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>中岡世里菜</span></td>
+            </tr><tr>
+              <td><strong>たまき矯正歯科</strong></td>
+              <td style="color:var(--muted);">2026年2月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥30,250</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#d97706;display:inline-block;"></span>高橋広輝</span></td>
+            </tr><tr>
+              <td><strong>エステサロン【シエル】</strong></td>
+              <td style="color:var(--muted);">2026年4月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥29,700</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#2563eb;display:inline-block;"></span>南原龍司</span></td>
+            </tr><tr>
+              <td><strong>天白はら接骨院ＡＣＴ</strong></td>
+              <td style="color:var(--muted);">2026年2月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥26,400</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#db2777;display:inline-block;"></span>田中莉奈</span></td>
+            </tr><tr>
+              <td><strong>居酒屋リンカーン 町田店</strong></td>
+              <td style="color:var(--muted);">2026年4月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥14,300</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#db2777;display:inline-block;"></span>田中莉奈</span></td>
+            </tr><tr>
+              <td><strong>アメニティ歯科クリニック</strong></td>
+              <td style="color:var(--muted);">2026年4月</td>
+              <td class="r" style="color:var(--danger);font-weight:700;">¥11,000</td>
+              <td><span class="st-badge minou-funou">未納</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-weight:700;"><span style="width:6px;height:6px;border-radius:50%;background:#2563eb;display:inline-block;"></span>南原龍司</span></td>
+            </tr></tbody></table></div></div>
+  </div>
+
+</div>
+<script>
+function swTab(id,btn){document.querySelectorAll('.tab-pane').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function toggleMinou(id,aid){const el=document.getElementById(id);const ar=document.getElementById(aid);const open=el.style.display==='none';el.style.display=open?'block':'none';ar.style.transform=open?'rotate(180deg)':'';}
+function toggleOkBox(){const b=document.getElementById('okBoxBody');const a=document.getElementById('okBoxArr');const open=b.classList.toggle('open');a.style.transform=open?'rotate(180deg)':'';}
+</script>
+</body>
+</html>

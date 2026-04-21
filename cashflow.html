@@ -104,10 +104,14 @@ table.dt tbody tr:hover td{background:#fafafa;}
 
   <!-- サマリー -->
   <div class="sum-grid">
-    <div class="sc"><div class="sc-lbl">PL累計（2025/04〜）</div><div class="sc-val">¥142,548,116</div><div class="sc-sub">利用月ベース</div></div>
-    <div class="sc"><div class="sc-lbl">CF累計（2025/04〜）</div><div class="sc-val">¥144,046,283</div><div class="sc-sub">支払期限ベース</div></div>
-    <div class="sc"><div class="sc-lbl">累計差分（CF－PL）</div><div class="sc-val" style="color:var(--success);">+¥1,498,167</div><div class="sc-sub">＋入金先行 ／ －回収待ち残あり</div></div>
-    <div class="sc"><div class="sc-lbl">累計回収率（CF÷PL）</div><div class="sc-val" style="color:var(--success);">101.1%</div><div class="sc-sub">100%に近いほど回収済み</div></div>
+    <div class="sc"><div class="sc-lbl">PL累計（2025/04〜）</div><div class="sc-val">¥147,765,218</div>
+        <div class="sc-sub">利用月ベース</div></div>
+    <div class="sc"><div class="sc-lbl">CF累計（2025/04〜）</div><div class="sc-val">¥149,263,385</div>
+        <div class="sc-sub">支払期限ベース</div></div>
+    <div class="sc"><div class="sc-lbl">累計差分（CF－PL）</div><div class="sc-val" style="color:var(--success);">+¥1,498,167</div>
+        <div class="sc-sub">＋入金先行 ／ －回収待ち残あり</div></div>
+    <div class="sc"><div class="sc-lbl">累計回収率（CF÷PL）</div><div class="sc-val" style="color:var(--success);">101.0%</div>
+        <div class="sc-sub">100%に近いほど回収済み</div></div>
   </div>
 
   <!-- 異常に見えるが問題ない説明 -->
@@ -128,7 +132,7 @@ table.dt tbody tr:hover td{background:#fafafa;}
         <div class="ok-month">🟡 2026年4月：CF +101%（+¥405万）← 最大の乖離</div>
         <div class="ok-reason">
           <strong>原因：支払期限が4月に設定されたレコードに、3月利用分と5月利用分が混在しているため。</strong><br>
-          内訳：2026年3月 利用分 297件 ¥3,877,463、2026年4月 利用分 2件 ¥68,500、2026年5月 利用分 142件 ¥4,108,822<br>
+          内訳：2026年3月 利用分 311件 ¥6,053,384、2026年4月 利用分 2件 ¥68,500、2026年5月 利用分 143件 ¥4,119,822<br>
           前払い（5月利用分を4月に先払い）のクライアントが142件含まれており、CFが膨らんで見えます。PLは正しく利用月に計上されているため問題ありません。
         </div>
       </div>
@@ -153,70 +157,7 @@ table.dt tbody tr:hover td{background:#fafafa;}
       <table class="dt"><thead><tr>
         <th>月</th><th class="r">PL（利用月）</th><th class="r">CF（支払期限）</th>
         <th class="r">月次差分</th><th class="r">累積差分</th><th class="r">累積回収率</th>
-      </tr></thead><tbody><tr>
-      <td><strong>2025年4月</strong></td>
-      <td class="r">¥12,128,023</td>
-      <td class="r">¥12,267,561</td>
-      <td class="r" style="font-weight:700;color:var(--success);">+¥139,538</td>
-      <td class="r" style="font-size:11px;color:var(--success);">+¥139,538</td>
-      <td class="r"><strong style="color:var(--success);">101.2%</strong></td>
-    </tr><tr>
-      <td><strong>2025年5月</strong></td>
-      <td class="r">¥12,688,253</td>
-      <td class="r">¥11,913,223</td>
-      <td class="r" style="font-weight:700;color:var(--danger);">-¥775,030</td>
-      <td class="r" style="font-size:11px;color:var(--danger);">-¥635,492</td>
-      <td class="r"><strong style="color:var(--warn);">97.4%</strong></td>
-    </tr><tr>
-      <td><strong>2025年6月</strong></td>
-      <td class="r">¥12,443,313</td>
-      <td class="r">¥12,741,003</td>
-      <td class="r" style="font-weight:700;color:var(--success);">+¥297,690</td>
-      <td class="r" style="font-size:11px;color:var(--danger);">-¥337,802</td>
-      <td class="r"><strong style="color:var(--success);">99.1%</strong></td>
-    </tr><tr>
-      <td><strong>2025年7月</strong></td>
-      <td class="r">¥12,134,089</td>
-      <td class="r">¥12,451,413</td>
-      <td class="r" style="font-weight:700;color:var(--success);">+¥317,324</td>
-      <td class="r" style="font-size:11px;color:var(--danger);">-¥20,478</td>
-      <td class="r"><strong style="color:var(--success);">100.0%</strong></td>
-    </tr><tr>
-      <td><strong>2025年8月</strong></td>
-      <td class="r">¥11,780,439</td>
-      <td class="r">¥12,191,989</td>
-      <td class="r" style="font-weight:700;color:var(--success);">+¥411,550</td>
-      <td class="r" style="font-size:11px;color:var(--success);">+¥391,072</td>
-      <td class="r"><strong style="color:var(--success);">100.6%</strong></td>
-    </tr><tr>
-      <td><strong>2025年9月</strong></td>
-      <td class="r">¥12,153,962</td>
-      <td class="r">¥12,471,239</td>
-      <td class="r" style="font-weight:700;color:var(--success);">+¥317,277</td>
-      <td class="r" style="font-size:11px;color:var(--success);">+¥708,349</td>
-      <td class="r"><strong style="color:var(--success);">101.0%</strong></td>
-    </tr><tr>
-      <td><strong>2025年10月</strong></td>
-      <td class="r">¥11,060,133</td>
-      <td class="r">¥11,836,810</td>
-      <td class="r" style="font-weight:700;color:var(--success);">+¥776,677</td>
-      <td class="r" style="font-size:11px;color:var(--success);">+¥1,485,026</td>
-      <td class="r"><strong style="color:var(--success);">101.8%</strong></td>
-    </tr><tr>
-      <td><strong>2025年11月</strong></td>
-      <td class="r">¥11,602,459</td>
-      <td class="r">¥10,095,785</td>
-      <td class="r" style="font-weight:700;color:var(--danger);">-¥1,506,674</td>
-      <td class="r" style="font-size:11px;color:var(--danger);">-¥21,648</td>
-      <td class="r"><strong style="color:var(--success);">100.0%</strong></td>
-    </tr><tr>
-      <td><strong>2025年12月</strong></td>
-      <td class="r">¥11,107,763</td>
-      <td class="r">¥9,026,281</td>
-      <td class="r" style="font-weight:700;color:var(--danger);">-¥2,081,482</td>
-      <td class="r" style="font-size:11px;color:var(--danger);">-¥2,103,130</td>
-      <td class="r"><strong style="color:var(--warn);">98.0%</strong></td>
-    </tr></tbody></table>
+      </tr></thead><tbody><tr><td><strong>2026年1月</strong></td><td class="r">¥10,711,796</td><td class="r">¥12,548,741</td><td class="r" style="font-weight:700;color:var(--success);">+¥1,836,945</td><td class="r" style="font-size:11px;color:var(--danger);">-¥396,535</td><td class="r"><strong style="color:var(--success);">99.7%</strong></td></tr><tr><td><strong>2026年2月</strong></td><td class="r">¥10,311,726</td><td class="r">¥10,803,458</td><td class="r" style="font-weight:700;color:var(--success);">+¥491,732</td><td class="r" style="font-size:11px;color:var(--success);">+¥95,197</td><td class="r"><strong style="color:var(--success);">100.1%</strong></td></tr><tr><td><strong>2026年3月</strong></td><td class="r">¥10,895,968</td><td class="r">¥10,392,576</td><td class="r" style="font-weight:700;color:var(--danger);">-¥503,392</td><td class="r" style="font-size:11px;color:var(--danger);">-¥408,195</td><td class="r"><strong style="color:var(--success);">99.7%</strong></td></tr><tr><td><strong>2026年4月</strong><span class="tbl-note">※前払い分集中</span></td><td class="r">¥3,998,822</td><td class="r">¥10,241,706</td><td class="r" style="font-weight:700;color:var(--success);">+¥6,242,884</td><td class="r" style="font-size:11px;color:var(--success);">+¥5,834,689</td><td class="r"><strong style="color:var(--success);">104.1%</strong></td></tr><tr><td><strong>2026年5月</strong><span class="tbl-note">※集計途中</span></td><td class="r">¥4,262,822</td><td class="r">¥77,000</td><td class="r" style="font-weight:700;color:var(--danger);">-¥4,185,822</td><td class="r" style="font-size:11px;color:var(--success);">+¥1,648,867</td><td class="r"><strong style="color:var(--success);">101.1%</strong></td></tr><tr><td><strong>2026年6月</strong><span class="tbl-note">※集計途中</span></td><td class="r">¥150,700</td><td class="r">¥0</td><td class="r" style="font-weight:700;color:var(--danger);">-¥150,700</td><td class="r" style="font-size:11px;color:var(--success);">+¥1,498,167</td><td class="r"><strong style="color:var(--success);">101.0%</strong></td></tr></tbody></table>
     </div></div>
     <div class="tab-pane" id="tab2026"><div class="tws">
       <table class="dt"><thead><tr>
@@ -270,7 +211,7 @@ table.dt tbody tr:hover td{background:#fafafa;}
 
   <!-- 未回収（未納）一覧 -->
   <div class="sec-ttl red" style="margin-bottom:12px;">未回収（未納）案件一覧
-    <span style="font-size:11px;font-weight:400;color:var(--muted);">2025年4月以降　合計26件 / ¥740,300</span>
+    <span style="font-size:11px;font-weight:400;color:var(--muted);">2025年4月以降　合計23件 / ¥725,450</span>
   </div>
   <div class="card">
     
